@@ -4,6 +4,7 @@ from datetime import datetime
 
 APP_ID = os.environ.get("APP_ID")
 API_KEY = os.environ.get("API_KEY")
+TOKEN = os.environ.get("TOKEN")
 GENDER = "female"
 WEIGHT_KG = 52
 HEIGHT_CM = 165
@@ -35,6 +36,11 @@ today = datetime.now().strftime("%d/%m/%Y")
 time = datetime.now().strftime("%X")
 
 for workout in exercise_result["exercises"]:
+
+    bearer_token = {
+        "Authorization": f"Bearer {TOKEN}"
+    }
+
     sheet_body = {
         "workout": {
             "date": today,
@@ -45,10 +51,6 @@ for workout in exercise_result["exercises"]:
         }
     }
 
-    sheet_response = requests.post(sheet_endpoint, json=sheet_body)
+    sheet_response = requests.post(sheet_endpoint, headers=bearer_token, json=sheet_body)
     sheet_response.raise_for_status()
-
-
-
-
-
+    print(sheet_response.json())
